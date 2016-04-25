@@ -1,0 +1,22 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.vic.webviewtest2.MainActivity">
+    <item
+        android:id="@+id/reLoad"
+        android:orderInCategory="1"
+        android:title="@string/reLoad"
+        app:showAsAction="ifRoom|withText"
+        android:icon="@android:drawable/stat_notify_sync"/>
+
+    <item
+        android:id="@+id/goBack"
+        android:icon="@drawable/ic_menu_back"
+        app:showAsAction="ifRoom|withText"
+        android:title="@string/goBack"/>
+    <item
+        android:id="@+id/goForward"
+        android:icon="@drawable/ic_menu_forward"
+        app:showAsAction="ifRoom|withText"
+        android:title="@string/goForward"/>
+</menu>
