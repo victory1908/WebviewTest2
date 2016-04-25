@@ -26,14 +26,14 @@ public class MainActivityFragment extends Fragment {
     public MainActivityFragment() {
     }
 
-    WebView myWebView;
+    WebView webView;
     Handler mIncomingHandler = new Handler(new IncomingHandlerCallback());
     ProgressBar progressBar;
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        myWebView.saveState(outState);
+        webView.saveState(outState);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class MainActivityFragment extends Fragment {
         View viewFragment = inflater.inflate(R.layout.fragment_main, container, false);
         setHasOptionsMenu(true);
 
-        myWebView = (WebView)viewFragment.findViewById(R.id.webview);
+        webView = (WebView)viewFragment.findViewById(R.id.webview);
 
         progressBar = (ProgressBar)viewFragment.findViewById(R.id.progressBar);
         progressBar.setProgress(0);
@@ -51,18 +51,22 @@ public class MainActivityFragment extends Fragment {
 
         // Reload the old WebView content
         if (savedInstanceState != null) {
-            myWebView.restoreState(savedInstanceState);
+            webView.restoreState(savedInstanceState);
         }else // Create the WebView
         {
-            myWebView.loadUrl("https://www.nlb.gov.sg");
+
             //Webview Setting
-            WebSettings webSettings = myWebView.getSettings();
+            WebSettings webSettings = webView.getSettings();
             webSettings.setJavaScriptEnabled(true);
             webSettings.setBuiltInZoomControls(true);
+            webSettings.setSupportZoom(true);
             webSettings.setLoadWithOverviewMode(true);
             webSettings.setUseWideViewPort(true);
+            webSettings.setAppCacheEnabled(true);
+            webSettings.setAppCachePath(getContext().getCacheDir().getPath());
+            webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
 
-            myWebView.setWebViewClient(new WebViewClient() {
+            webView.setWebViewClient(new WebViewClient() {
 
                 @Override
                 public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -84,7 +88,7 @@ public class MainActivityFragment extends Fragment {
                 }
             });
 
-            myWebView.setWebChromeClient(new WebChromeClient() {
+            webView.setWebChromeClient(new WebChromeClient() {
                 public void onProgressChanged(WebView view, int progress) {
                     progressBar.setProgress(progress);
 
@@ -98,10 +102,10 @@ public class MainActivityFragment extends Fragment {
                 }
             });
 
-            myWebView.setOnKeyListener(new View.OnKeyListener() {
+            webView.setOnKeyListener(new View.OnKeyListener() {
 
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
-                    if ((keyCode == KeyEvent.KEYCODE_BACK) && myWebView.canGoBack()) {
+                    if ((keyCode == KeyEvent.KEYCODE_BACK) && webView.canGoBack()) {
                         mIncomingHandler.sendEmptyMessage(1);
                         return true;
                     }
@@ -110,6 +114,8 @@ public class MainActivityFragment extends Fragment {
 
             });
         }
+
+        webView.loadUrl("https://www.nlb.gov.sg");
 
         return viewFragment;
     }
@@ -122,7 +128,7 @@ public class MainActivityFragment extends Fragment {
 
             switch (message.what) {
                 case 1: {
-                    myWebView.goBack();
+                    webView.goBack();
                 }
                 break;
             }
@@ -152,19 +158,19 @@ public class MainActivityFragment extends Fragment {
         switch (item.getItemId()) {
 
             case R.id.goBack:
-                if(myWebView.canGoBack()) {
-                    myWebView.goBack();
+                if(webView.canGoBack()) {
+                    webView.goBack();
                 }
                 return true;
 
             case R.id.goForward:
-                if(myWebView.canGoForward()) {
-                    myWebView.goForward();
+                if(webView.canGoForward()) {
+                    webView.goForward();
                 }
                 return true;
 
             case R.id.reLoad:
-                myWebView.reload();
+                webView.reload();
                 return true;
 
             default:
